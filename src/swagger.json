@@ -23,6 +23,10 @@
     {
       "name": "Users",
       "description": "Usuários"
+    },
+    {
+      "name": "Sessions",
+      "description": "Autenticação do usuário"
     }
   ],
   "paths": {
@@ -63,6 +67,39 @@
           },
           "409": {
             "description": "This document is already registered"
+          }
+        }
+      }
+    },
+
+    "/sessions": {
+      "post": {
+        "tags": ["Sessions"],
+        "summary": "Autenticação do usuário",
+        "description": "Essa rota permite o login do usuário, fornecendo o token de autenticação",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "document": {
+                    "$ref": "#/components/schemas/Users/properties/document"
+                  },
+                  "password": {
+                    "$ref": "#/components/schemas/Users/properties/password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Incorrect email/password combination"
           }
         }
       }
