@@ -1,0 +1,146 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Hello Work",
+    "description": "Olá, essa é a documentação da API do Hello Work. \n\n A API segue o padrão REST e todas suas respostas são em JSON. \n\n Essa API usa como retorno os códigos HTTP padrão para indicar tanto o sucesso de uma requisição, quanto para indicar falha. Segue abaixo os principais: \n\n 1. 200 - Success \n\n",
+    "version": "1.0.0",
+    "contact": {
+      "email": ""
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:{port}",
+      "description": "Local server",
+      "variables": {
+        "port": {
+          "default": "3333"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Usuários"
+    }
+  ],
+  "paths": {
+    "/user": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Criação de um novo usuário",
+        "description": "Essa rota permite a criação de um novo usuário",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "$ref": "#/components/schemas/Users/properties/name"
+                  },
+                  "document": {
+                    "$ref": "#/components/schemas/Users/properties/document"
+                  },
+                  "password": {
+                    "$ref": "#/components/schemas/Users/properties/password"
+                  },
+                  "password_confirmation": {
+                    "$ref": "#/components/schemas/Users/properties/password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Document formatting is wrong"
+          },
+          "409": {
+            "description": "This document is already registered"
+          }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+      "GeneralError": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+
+      "Users": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "document",
+          "password"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "daa1408d-5b72-49f3-8543-1f9513507a77"
+          },
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "document": {
+            "type": "string",
+            "example": "24445567890"
+          },
+          "password": {
+            "type": "string",
+            "example": "123456"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "datetime",
+            "example": "2022-02-25T20:36:00.611Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "datetime",
+            "example": "2022-02-25T20:36:00.611Z"
+          }
+        }
+      }
+    },
+    "responses": {
+      "GeneralError": {
+        "description": "General Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GeneralError"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "Enter JWT Bearer Token **_only_**",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
