@@ -27,6 +27,10 @@
     {
       "name": "Sessions",
       "description": "Autenticação do usuário"
+    },
+    {
+      "name": "Attendances",
+      "description": "Presenças dos Colaboradores"
     }
   ],
   "paths": {
@@ -103,6 +107,25 @@
           }
         }
       }
+    },
+
+    "/attendance": {
+      "post": {
+        "tags": ["Attendances"],
+        "summary": "Contabilização de presença do colaborador",
+        "description": "Essa rota permite contabilizar uma nova presença ao colaborador",
+        "security": [
+          { "Bearer": [] }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "JWT token is missing | Invalid JWT token"
+          }
+        }
+      }
     }
   },
 
@@ -145,6 +168,36 @@
           "password": {
             "type": "string",
             "example": "123456"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "datetime",
+            "example": "2022-02-25T20:36:00.611Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "datetime",
+            "example": "2022-02-25T20:36:00.611Z"
+          }
+        }
+      },
+
+      "Attendances": {
+        "type": "object",
+        "required": [
+          "id",
+          "user_id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "daa1408d-5b72-49f3-8543-1f9513507a77"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "$ref": "#/components/schemas/Users/properties/id"
           },
           "created_at": {
             "type": "string",
