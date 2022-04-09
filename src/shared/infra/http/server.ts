@@ -1,4 +1,11 @@
+import 'reflect-metadata';
+import 'dotenv/config';
+
 import express from 'express';
+
+import createConnection from '@shared/infra/typeorm';
+
+createConnection();
 
 const app = express();
 
