@@ -15,6 +15,9 @@ class Attendance {
   id: string;
 
   @Column()
+  date: Date;
+
+  @Column()
   user_id: string;
 
   @ManyToOne(() => User, user => user.attendances)

@@ -1,12 +1,12 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export default class CreateAttendances1649534283066
+export default class CreatePermissionsGroups1649622237762
   implements MigrationInterface
 {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'attendances',
+        name: 'permissions_groups',
         columns: [
           {
             name: 'id',
@@ -16,7 +16,11 @@ export default class CreateAttendances1649534283066
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'user_id',
+            name: 'group_id',
+            type: 'uuid',
+          },
+          {
+            name: 'permission_id',
             type: 'uuid',
           },
           {
@@ -32,10 +36,18 @@ export default class CreateAttendances1649534283066
         ],
         foreignKeys: [
           {
-            name: 'UserId',
-            referencedTableName: 'users',
+            name: 'GroupId',
+            referencedTableName: 'groups',
             referencedColumnNames: ['id'],
-            columnNames: ['user_id'],
+            columnNames: ['group_id'],
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+          },
+          {
+            name: 'PermissionId',
+            referencedTableName: 'permissions',
+            referencedColumnNames: ['id'],
+            columnNames: ['permission_id'],
             onDelete: 'CASCADE',
             onUpdate: 'CASCADE',
           },
@@ -45,6 +57,6 @@ export default class CreateAttendances1649534283066
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('attendances');
+    await queryRunner.dropTable('permissions_groups');
   }
 }

@@ -1,12 +1,12 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export default class CreateAttendances1649534283066
+export default class CreatePermissions1649589903133
   implements MigrationInterface
 {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'attendances',
+        name: 'permissions',
         columns: [
           {
             name: 'id',
@@ -16,8 +16,12 @@ export default class CreateAttendances1649534283066
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'user_id',
-            type: 'uuid',
+            name: 'name',
+            type: 'char(50)',
+          },
+          {
+            name: 'description',
+            type: 'char(100)',
           },
           {
             name: 'created_at',
@@ -30,21 +34,11 @@ export default class CreateAttendances1649534283066
             default: 'now()',
           },
         ],
-        foreignKeys: [
-          {
-            name: 'UserId',
-            referencedTableName: 'users',
-            referencedColumnNames: ['id'],
-            columnNames: ['user_id'],
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
-          },
-        ],
       }),
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('attendances');
+    await queryRunner.dropTable('permissions');
   }
 }

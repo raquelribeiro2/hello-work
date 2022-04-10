@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "API Hello Work",
-    "description": "Olá, essa é a documentação da API do Hello Work. \n\n A API segue o padrão REST e todas suas respostas são em JSON. \n\n Essa API usa como retorno os códigos HTTP padrão para indicar tanto o sucesso de uma requisição, quanto para indicar falha. Segue abaixo os principais: \n\n 1. 200 - Success \n\n",
+    "description": "Olá, essa é a documentação da API do Hello Work. \n\n A API segue o padrão REST e todas suas respostas são em JSON. \n\n Essa API usa como retorno os códigos HTTP padrão para indicar tanto o sucesso de uma requisição, quanto para indicar falha. Segue abaixo os principais: \n\n 1. 200 - Success \n\n 2. 401 - JWT token is missing | Invalid JWT token",
     "version": "1.0.0",
     "contact": {
       "email": ""
@@ -67,7 +67,7 @@
             "description": "Success"
           },
           "400": {
-            "description": "Document formatting is wrong"
+            "description": "The document field only accepts numbers"
           },
           "409": {
             "description": "This document is already registered"
@@ -126,6 +126,148 @@
           }
         }
       }
+    },
+
+    "/attendances": {
+      "get": {
+        "tags": ["Attendances"],
+        "summary": "Busca todas as presenças dos colaboradores",
+        "description": "Essa rota permite buscar todas as presenças de todos os colaboradores",
+        "security": [
+          { "Bearer": [] }
+        ],
+        "parameters": [
+          {
+            "name": "fromDay",
+            "in": "query",
+            "required": false,
+            "description": "Parâmetro que permite filtrar as presenças à partir de um determinado dia.",
+            "schema": {
+              "type": "string",
+              "format": "datetime"
+            }
+          },
+          {
+            "name": "toDay",
+            "in": "query",
+            "required": false,
+            "description": "Parâmetro que permite filtrar as presenças até determinado dia.",
+            "schema": {
+              "type": "string",
+              "format": "datetime"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "description": "Parâmetro que determina o index pelo qual se deve iniciar a consulta.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "Parâmetro que limita a quantidade de resultados por página.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "JWT token is missing | Invalid JWT token"
+          }
+        }
+      }
+    },
+
+    "/attendance/{attendanceId}": {
+      "put": {
+        "tags": ["Attendances"],
+        "summary": "Edição de uma presença de um colaborador",
+        "description": "Essa rota permite a edição de uma presença de um colaborador",
+        "security": [
+          { "Bearer": [] }
+        ],
+        "parameters": [
+          {
+            "name": "attendanceId",
+            "in": "path",
+            "description": "ID da presença do colaborador que deseja editar",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user_id": {
+                    "$ref": "#/components/schemas/Users/properties/id"
+                  },
+                  "date": {
+                    "$ref": "#/components/schemas/Attendances/properties/date"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "JWT token is missing | Invalid JWT token"
+          },
+          "404": {
+            "description": "Attendance not found | User not found"
+          }
+        }
+      },
+
+      "delete": {
+        "tags": ["Attendances"],
+        "summary": "Exclusão de uma presença de um colaborador",
+        "description": "Essa rota permite excluir uma presença de um colaborador",
+        "security": [
+          { "Bearer": [] }
+        ],
+        "parameters": [
+          {
+            "name": "attendanceId",
+            "in": "path",
+            "description": "ID da presença do colaborador que deseja excluir",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The attendance has been successfully removed"
+          },
+          "401": {
+            "description": "JWT token is missing / Invalid JWT token"
+          },
+          "404": {
+            "description": "Attendance not found"
+          }
+        }
+      }
     }
   },
 
@@ -155,7 +297,7 @@
           "id": {
             "type": "string",
             "format": "uuid",
-            "example": "daa1408d-5b72-49f3-8543-1f9513507a77"
+            "example": "e8844caf-10af-4327-b601-6b7d9fd2b476"
           },
           "name": {
             "type": "string",
@@ -186,18 +328,200 @@
         "type": "object",
         "required": [
           "id",
-          "user_id"
+          "user_id",
+          "date"
         ],
         "properties": {
           "id": {
             "type": "string",
             "format": "uuid",
-            "example": "daa1408d-5b72-49f3-8543-1f9513507a77"
+            "example": "577a3874-bb37-4bca-a7a7-34c51e06b1d3"
           },
           "user_id": {
             "type": "string",
             "format": "uuid",
             "$ref": "#/components/schemas/Users/properties/id"
+          },
+          "date": {
+            "type": "string",
+            "format": "datetime",
+            "$ref": "2022-02-25T20:36:00.611Z"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "datetime",
+            "example": "2022-02-25T20:36:00.611Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "datetime",
+            "example": "2022-02-25T20:36:00.611Z"
+          }
+        }
+      },
+
+      "Groups": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "description"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "537d1f77-965e-451e-b12c-48e3a40e1e73"
+          },
+          "name": {
+            "type": "string",
+            "example": "user"
+          },
+          "description": {
+            "type": "string",
+            "example": "User"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "datetime",
+            "example": "2022-02-25T20:36:00.611Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "datetime",
+            "example": "2022-02-25T20:36:00.611Z"
+          }
+        }
+      },
+
+      "UsersGroups": {
+        "type": "object",
+        "required": [
+          "id",
+          "user_id",
+          "group_id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "8d1c294e-10e1-4797-a0f8-7f2559beeab7"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "$ref": "#/components/schemas/Users/properties/id"
+          },
+          "group_id": {
+            "type": "string",
+            "format": "uuid",
+            "$ref": "#/components/schemas/Groups/properties/id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "datetime",
+            "example": "2022-02-25T20:36:00.611Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "datetime",
+            "example": "2022-02-25T20:36:00.611Z"
+          }
+        }
+      },
+
+      "Permissions": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "description"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "4065a716-d791-4717-9f29-1b2b79e98f12"
+          },
+          "name": {
+            "type": "string",
+            "example": "create_attendance"
+          },
+          "description": {
+            "type": "string",
+            "example": "Create Attendance"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "datetime",
+            "example": "2022-02-25T20:36:00.611Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "datetime",
+            "example": "2022-02-25T20:36:00.611Z"
+          }
+        }
+      },
+
+      "UsersPermissions": {
+        "type": "object",
+        "required": [
+          "id",
+          "user_id",
+          "permission_id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "88df41fc-c4bd-4596-bd97-7cdf092b4e7f"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "$ref": "#/components/schemas/Users/properties/id"
+          },
+          "permission_id": {
+            "type": "string",
+            "format": "uuid",
+            "$ref": "#/components/schemas/Permissions/properties/id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "datetime",
+            "example": "2022-02-25T20:36:00.611Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "datetime",
+            "example": "2022-02-25T20:36:00.611Z"
+          }
+        }
+      },
+
+      "PermissionsGroups": {
+        "type": "object",
+        "required": [
+          "id",
+          "permission_id",
+          "group_id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "bafed19e-dcc6-4de5-927a-03977998b0ca"
+          },
+          "group_id": {
+            "type": "string",
+            "format": "uuid",
+            "$ref": "#/components/schemas/Groups/properties/id"
+          },
+          "permission_id": {
+            "type": "string",
+            "format": "uuid",
+            "$ref": "#/components/schemas/Permissions/properties/id"
           },
           "created_at": {
             "type": "string",
