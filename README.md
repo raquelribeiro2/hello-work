@@ -4,7 +4,6 @@ Projeto desenvolvido com a finalidade de automatização do processo de presenç
 
 O sistema possui níveis de permissões, onde um usuário do grupo *admin* pode Cadastrar, Listar, Editar e Deletar presenças e o usuário do grupo *user* possui permissão de apenas Cadastrar uma presença para ele mesmo, após se autenticar com Login - seu próprio CPF - e senha.
 
-
 ## Iniciando a aplicação
 
 - Após fazer o clone do projeto, execute ```yarn``` ou ```npm install``` para instalar todas as dependências necessárias para que o projeto funcione.
@@ -84,6 +83,9 @@ yarn seed:admin
 ## Documentação
 
 É possível acessar a documentação presente no [Swagger](http://localhost:3333/api-docs/) após iniciar o servidor.
+
+### MER
+![MER_DNC_Group drawio](https://user-images.githubusercontent.com/57918707/162968490-7b758530-1999-4b20-9983-34ee1f856991.png)
 
 
 ## Testes
