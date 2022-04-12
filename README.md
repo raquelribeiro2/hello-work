@@ -2,7 +2,8 @@
 
 Projeto desenvolvido com a finalidade de automatização do processo de presenças em um escritório.
 
-É possível acessar a documentação presente no [Swagger](http://localhost:3333/api-docs/) após iniciar o servidor.
+O sistema possui níveis de permissões, onde um usuário do grupo *admin* pode Cadastrar, Listar, Editar e Deletar presenças e o usuário do grupo *user* possui permissão de apenas Cadastrar uma presença para ele mesmo, após se autenticar com Login - seu próprio CPF - e senha.
+
 
 ## Iniciando a aplicação
 
@@ -65,9 +66,29 @@ yarn typeorm migration:run
 npm typeorm migration:run
 ```
 
-- Para implementação do usuário administrador, é necessário executar a seed com o comando ```yarn seed```, que irá ler as credenciais presentes no arquivo *.env*, compostas por um CPF fake e uma senha aleatória. 
+### Implementação do usuário administrador
+
+- Para implementação deste usuário, é necessário executar duas seeds, sendo uma de criação de módulos do sistema e outra para criação do usuário *admin* e suas permissões em cada módulo. O script irá ler as credenciais presentes no arquivo *.env*, compostas por um CPF fake e uma senha aleatória. 
+
+```bash
+yarn seed:modules
+
+yarn seed:admin
+```
 
 - Por fim, já é possível iniciar o servidor com o comando ```yarn dev:server``` ou ```npm run dev:server```.
 
 - A mensagem **Server started on port 3333** mostra que o servidor foi iniciado.
+
+
+## Documentação
+
+É possível acessar a documentação presente no [Swagger](http://localhost:3333/api-docs/) após iniciar o servidor.
+
+
+## Testes
+
+A aplicação possui 100% de cobertura de testes unitários realizados com Jest.
+
+- Com o comando ```yarn test``` ou ```npm run test``` executa-se todos os testes presentes.
 
