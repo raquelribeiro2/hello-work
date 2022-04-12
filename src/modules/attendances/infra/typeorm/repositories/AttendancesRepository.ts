@@ -1,9 +1,11 @@
+/* eslint-disable no-param-reassign */
 import { getRepository, Repository } from 'typeorm';
 
 import IAttendancesRepository from '@modules/attendances/repositories/IAttendancesRepository';
 
-import Attendance from '../entities/Attendance';
 import IUpdateAttendanceDTO from '@modules/attendances/dtos/IUpdateAttendanceDTO';
+import ICreateAttendanceDTO from '@modules/attendances/dtos/ICreateAttendanceDTO';
+import Attendance from '../entities/Attendance';
 
 class AttendancesRepository implements IAttendancesRepository {
   private ormRepository: Repository<Attendance>;
@@ -12,9 +14,13 @@ class AttendancesRepository implements IAttendancesRepository {
     this.ormRepository = getRepository(Attendance);
   }
 
-  public async create(user_id: string): Promise<Attendance> {
+  public async create({
+    user_id,
+    date,
+  }: ICreateAttendanceDTO): Promise<Attendance> {
     const attendance = this.ormRepository.create({
       user_id,
+      date,
     });
 
     await this.ormRepository.save(attendance);

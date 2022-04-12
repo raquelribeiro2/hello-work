@@ -21,7 +21,10 @@ export default class AttendancesController {
 
     const createUserAttendance = container.resolve(CreateAttendanceService);
 
-    const attendance = await createUserAttendance.execute(user_id);
+    const attendance = await createUserAttendance.execute({
+      user_id,
+      date: new Date(Date.now()),
+    });
 
     return response.json(attendance);
   }
