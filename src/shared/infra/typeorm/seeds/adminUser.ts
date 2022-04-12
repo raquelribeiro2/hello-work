@@ -34,6 +34,59 @@ async function create() {
     `,
   );
 
+  await connection.query(
+    `
+    INSERT INTO PERMISSIONS(id, "canCreate", "canEdit", "canView", "canDelete", module_id, group_id, created_at, updated_at)
+		  values
+				(
+					'${uuidV4()}',
+					true,
+          true,
+          true,
+          true,
+          (SELECT id AS module_id FROM MODULES
+          	WHERE modules.name='attendances'),
+          (SELECT id AS group_id FROM GROUPS
+            WHERE groups.type='admin'),
+          'now()',
+          'now()'
+         );
+
+    INSERT INTO PERMISSIONS(id, "canCreate", "canEdit", "canView", "canDelete", module_id, group_id, created_at, updated_at)
+    values
+      (
+        '${uuidV4()}',
+        true,
+        true,
+        true,
+        true,
+        (SELECT id AS module_id FROM MODULES
+          WHERE modules.name='permissions'),
+        (SELECT id AS group_id FROM GROUPS
+          WHERE groups.type='admin'),
+        'now()',
+        'now()'
+      );
+
+    INSERT INTO PERMISSIONS(id, "canCreate", "canEdit", "canView", "canDelete", module_id, group_id, created_at, updated_at)
+    values
+      (
+        '${uuidV4()}',
+        true,
+        true,
+        true,
+        true,
+        (SELECT id AS module_id FROM MODULES
+          WHERE modules.name='users'),
+        (SELECT id AS group_id FROM GROUPS
+          WHERE groups.type='admin'),
+        'now()',
+        'now()'
+        );
+
+    `,
+  );
+
   await connection.close();
 }
 

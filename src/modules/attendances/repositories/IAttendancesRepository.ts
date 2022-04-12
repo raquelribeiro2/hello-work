@@ -15,7 +15,7 @@ export default interface IAttendancesRepository {
   findById(id: string): Promise<Attendance | undefined>;
   update({
     attendance_id,
-    employee_id,
+    user_id,
     date,
   }: IUpdateAttendanceDTO): Promise<Attendance>;
   deleteById(id: string): Promise<void>;

@@ -79,7 +79,7 @@ class FakeAttendancesRepository implements IAttendancesRepository {
 
   public async update({
     attendance_id,
-    employee_id,
+    user_id,
     date,
   }: IUpdateAttendanceDTO): Promise<Attendance> {
     const findAttendance = this.attendances.find(
@@ -87,7 +87,7 @@ class FakeAttendancesRepository implements IAttendancesRepository {
     );
 
     const updatedAttendance = Object.assign(findAttendance, {
-      employee_id,
+      user_id,
       date,
     });
 

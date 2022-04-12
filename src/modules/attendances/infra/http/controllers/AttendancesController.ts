@@ -57,16 +57,16 @@ export default class AttendancesController {
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
-    const user_id = request.user.id;
+    const { id: userLogged } = request.user;
 
     const { attendance_id } = request.params;
 
-    const { user_id: employee_id, date } = request.body;
+    const { user_id, date } = request.body;
 
     const checkPermission = container.resolve(CheckPermissionService);
 
     await checkPermission.execute({
-      user_id,
+      user_id: userLogged,
       module: 'attendances',
       permission: 'canEdit',
     });
@@ -75,7 +75,7 @@ export default class AttendancesController {
 
     const attendance = await updateAttendance.execute({
       attendance_id,
-      employee_id,
+      user_id,
       date,
     });
 

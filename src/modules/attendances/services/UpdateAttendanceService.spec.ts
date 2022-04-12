@@ -32,7 +32,7 @@ describe('UpdateAttendance', () => {
     });
 
     const attendanceUpdated = await updateAttendance.execute({
-      employee_id: user.id,
+      user_id: user.id,
       attendance_id: attendance.id,
       date: new Date(2022, 3, 10),
     });
@@ -49,7 +49,7 @@ describe('UpdateAttendance', () => {
 
     await expect(
       updateAttendance.execute({
-        employee_id: user.id,
+        user_id: user.id,
         attendance_id: 'non-existent attendance',
         date: new Date(2022, 3, 10),
       }),
@@ -70,7 +70,7 @@ describe('UpdateAttendance', () => {
 
     await expect(
       updateAttendance.execute({
-        employee_id: 'non-existent user',
+        user_id: 'non-existent user',
         attendance_id: attendance.id,
         date: new Date(2022, 3, 10),
       }),

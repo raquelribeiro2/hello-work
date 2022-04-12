@@ -98,13 +98,13 @@ class AttendancesRepository implements IAttendancesRepository {
 
   public async update({
     attendance_id,
-    employee_id,
+    user_id,
     date,
   }: IUpdateAttendanceDTO): Promise<Attendance> {
     const findAttendance = await this.ormRepository.findOne(attendance_id);
 
     const updatedAttendance = Object.assign(findAttendance, {
-      employee_id,
+      user_id,
       date,
     });
 
