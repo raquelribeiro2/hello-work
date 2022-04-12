@@ -1,4 +1,3 @@
-import Attendance from '@modules/attendances/infra/typeorm/entities/Attendance';
 import { Exclude } from 'class-transformer';
 import {
   Entity,
@@ -8,6 +7,9 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
+
+import UserGroup from '@modules/permissions/infra/typeorm/entities/UserGroup';
+import Attendance from '@modules/attendances/infra/typeorm/entities/Attendance';
 
 @Entity('users')
 class User {
@@ -26,6 +28,9 @@ class User {
 
   @OneToMany(() => Attendance, attendances => attendances.user)
   attendances: Attendance[];
+
+  @OneToMany(() => UserGroup, userGroups => userGroups.user)
+  userGroups: UserGroup[];
 
   @CreateDateColumn()
   created_at: Date;
