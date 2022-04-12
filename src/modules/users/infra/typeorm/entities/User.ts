@@ -6,13 +6,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
-  ManyToMany,
-  JoinTable,
 } from 'typeorm';
 
+import UserGroup from '@modules/permissions/infra/typeorm/entities/UserGroup';
 import Attendance from '@modules/attendances/infra/typeorm/entities/Attendance';
-import Group from '@modules/permissions/infra/typeorm/entities/Group';
-import Permission from '@modules/permissions/infra/typeorm/entities/Permission';
 
 @Entity('users')
 class User {
@@ -32,21 +29,8 @@ class User {
   @OneToMany(() => Attendance, attendances => attendances.user)
   attendances: Attendance[];
 
-  @ManyToMany(() => Group)
-  @JoinTable({
-    name: 'users_groups',
-    joinColumns: [{ name: 'user_id' }],
-    inverseJoinColumns: [{ name: 'group_id' }],
-  })
-  groups: Group[];
-
-  @ManyToMany(() => Permission)
-  @JoinTable({
-    name: 'users_permissions',
-    joinColumns: [{ name: 'user_id' }],
-    inverseJoinColumns: [{ name: 'permission_id' }],
-  })
-  permissions: Permission[];
+  @OneToMany(() => UserGroup, userGroups => userGroups.user)
+  userGroups: UserGroup[];
 
   @CreateDateColumn()
   created_at: Date;

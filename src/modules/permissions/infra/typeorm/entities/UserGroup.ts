@@ -4,29 +4,31 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToMany,
-  JoinTable,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
-import Permission from './Permission';
 
-@Entity('groups')
+import User from '@modules/users/infra/typeorm/entities/User';
+import Group from './Group';
+
+@Entity('users_groups')
 class UserGroup {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @ManyToOne(() => User, user => user.userGroups)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
+
   @Column()
   user_id: string;
 
+  @ManyToOne(() => Group, group => group.userGroups)
+  @JoinColumn({ name: 'group_id' })
+  group: Group;
+
   @Column()
   group_id: string;
-
-  @ManyToMany(() => Permission)
-  @JoinTable({
-    name: 'permissions_groups',
-    joinColumns: [{ name: 'group_id' }],
-    inverseJoinColumns: [{ name: 'permission_id' }],
-  })
-  permissions: Permission[];
 
   @CreateDateColumn()
   created_at: Date;

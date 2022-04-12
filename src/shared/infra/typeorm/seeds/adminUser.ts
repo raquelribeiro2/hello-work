@@ -18,20 +18,10 @@ async function create() {
   );
 
   await connection.query(
-    `INSERT INTO GROUPS(id, name, description, created_at, updated_at)
+    `INSERT INTO GROUPS(id, name, type, created_at, updated_at)
       values
-      ('${uuidV4()}', 'admin', 'Administrador', 'now()', 'now()'),
-      ('${uuidV4()}', 'user', 'Usuário', 'now()', 'now()');
-    `,
-  );
-
-  await connection.query(
-    `INSERT INTO PERMISSIONS(id, name, description, created_at, updated_at)
-      values
-      ('${uuidV4()}', 'create_attendance', 'Adiciona Presença', 'now()', 'now()'),
-      ('${uuidV4()}', 'list_attendance', 'Acessa Presenças', 'now()', 'now()'),
-      ('${uuidV4()}', 'edit_attendance', 'Edita Presença', 'now()', 'now()'),
-      ('${uuidV4()}', 'delete_attendance', 'Exclui Presença', 'now()', 'now()');
+      ('${uuidV4()}', 'Administrador', 'admin',  'now()', 'now()'),
+      ('${uuidV4()}', 'Usuário', 'user', 'now()', 'now()');
     `,
   );
 
@@ -40,59 +30,11 @@ async function create() {
     INSERT INTO USERS_GROUPS(user_id, group_id)
       SELECT users.id, groups.id FROM USERS
       JOIN GROUPS ON
-        groups.name='admin';
-    `,
-  );
-
-  await connection.query(
-    `
-    INSERT INTO USERS_PERMISSIONS(user_id, permission_id)
-      SELECT users.id, permissions.id FROM USERS
-        INNER JOIN PERMISSIONS
-        	ON permissions.name='create_attendance';
-
-    INSERT INTO USERS_PERMISSIONS(user_id, permission_id)
-      SELECT users.id, permissions.id FROM USERS
-        INNER JOIN PERMISSIONS
-          ON permissions.name='list_attendance';
-
-    INSERT INTO USERS_PERMISSIONS(user_id, permission_id)
-      SELECT users.id, permissions.id FROM USERS
-        INNER JOIN PERMISSIONS
-          ON permissions.name='edit_attendance';
-
-    INSERT INTO USERS_PERMISSIONS(user_id, permission_id)
-      SELECT users.id, permissions.id FROM USERS
-        INNER JOIN PERMISSIONS
-          ON permissions.name='delete_attendance';
-    `,
-  );
-
-  await connection.query(
-    `
-    INSERT INTO PERMISSIONS_GROUPS(group_id, permission_id)
-      SELECT groups.id, permissions.id FROM GROUPS
-        INNER JOIN PERMISSIONS
-        	ON permissions.name='create_attendance';
-
-    INSERT INTO PERMISSIONS_GROUPS(group_id, permission_id)
-      SELECT groups.id, permissions.id FROM GROUPS
-        INNER JOIN PERMISSIONS
-          ON permissions.name='list_attendance';
-
-    INSERT INTO PERMISSIONS_GROUPS(group_id, permission_id)
-      SELECT groups.id, permissions.id FROM GROUPS
-        INNER JOIN PERMISSIONS
-          ON permissions.name='edit_attendance';
-
-    INSERT INTO PERMISSIONS_GROUPS(group_id, permission_id)
-      SELECT groups.id, permissions.id FROM GROUPS
-        INNER JOIN PERMISSIONS
-          ON permissions.name='delete_attendance';
+        groups.type='admin';
     `,
   );
 
   await connection.close();
 }
 
-create().then(() => console.log('Admin user created'));
+create().then(() => console.log('Admin user created!'));

@@ -1,6 +1,6 @@
+import Attendance from '../infra/typeorm/entities/Attendance';
 import ICreateAttendanceDTO from '../dtos/ICreateAttendanceDTO';
 import IUpdateAttendanceDTO from '../dtos/IUpdateAttendanceDTO';
-import Attendance from '../infra/typeorm/entities/Attendance';
 
 export default interface IAttendancesRepository {
   create({ user_id, date }: ICreateAttendanceDTO): Promise<Attendance>;
@@ -15,7 +15,7 @@ export default interface IAttendancesRepository {
   findById(id: string): Promise<Attendance | undefined>;
   update({
     attendance_id,
-    user_id,
+    employee_id,
     date,
   }: IUpdateAttendanceDTO): Promise<Attendance>;
   deleteById(id: string): Promise<void>;

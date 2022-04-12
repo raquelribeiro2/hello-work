@@ -2,73 +2,60 @@ import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 
-import IGroupsRepository from '@modules/permissions/repositories/IGroupsRepository';
-import IPermissionsRepository from '@modules/permissions/repositories/IPermissionsRepository';
-import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+import IModulesRepository from '../repositories/IModulesRepository';
+import IPermissionsRepository from '../repositories/IPermissionsRepository';
+import IUsersGroupsRepository from '../repositories/IUsersGroupsRepository';
 
 interface IRequest {
   user_id: string;
-  is?: string;
-  can?: string;
+  permission: string;
+  module: string;
 }
 
 @injectable()
 class CheckPermissionService {
   constructor(
-    @inject('GroupsRepository')
-    private groupsRepository: IGroupsRepository,
+    @inject('ModulesRepository')
+    private modulesRepository: IModulesRepository,
 
-    @inject('UsersRepository')
-    private usersRepository: IUsersRepository,
+    @inject('UsersGroupsRepository')
+    private usersGroupsRepository: IUsersGroupsRepository,
 
     @inject('PermissionsRepository')
     private permissionsRepository: IPermissionsRepository,
   ) {}
 
-  public async execute({ user_id, is, can }: IRequest): Promise<void> {
-    const user = await this.usersRepository.findById(user_id);
+  public async execute({
+    user_id,
+    permission,
+    module,
+  }: IRequest): Promise<void> {
+    const findModule = await this.modulesRepository.findByModuleName(module);
 
-    if (!user) {
-      throw new AppError('User not found', 404);
+    if (!findModule) {
+      throw new AppError('Module not found', 404);
     }
 
-    const userGroups = await this.usersRepository.findUsersGroups(user.id);
+    const userGroups = await this.usersGroupsRepository.findAll(user_id);
 
     let hasPermission = false;
 
     await Promise.all(
       userGroups.map(async userGroup => {
-        const userPermissions = await this.usersRepository.findUsersPermissions(
-          user.id,
-        );
+        const findPermission =
+          await this.permissionsRepository.findByGroupAndModuleId(
+            findModule.id,
+            userGroup.group_id,
+          );
 
-        if (can) {
-          console.log('AQUI');
-          userPermissions.map(async userPermission => {
-            console.log('AQUI 2');
-
-            userPermission.permissions.map(async permission => {
-              console.log('AQUI 3');
-
-              const findPermission = await this.permissionsRepository.findById(
-                permission.id,
-              );
-
-              console.log('AQUI 4');
-
-              if (findPermission && findPermission.name === can) {
-                console.log('AQUI 5');
-
-                hasPermission = true;
-              }
-            });
-          });
+        if (findPermission && findPermission[permission]) {
+          hasPermission = true;
         }
       }),
     );
 
     if (!hasPermission) {
-      throw new AppError('You do not have permission to access', 401);
+      throw new AppError(`You are not allowed to ${permission} ${module}`, 403);
     }
   }
 }

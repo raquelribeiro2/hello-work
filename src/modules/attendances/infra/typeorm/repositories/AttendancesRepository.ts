@@ -3,8 +3,8 @@ import { getRepository, Repository } from 'typeorm';
 
 import IAttendancesRepository from '@modules/attendances/repositories/IAttendancesRepository';
 
-import ICreateAttendanceDTO from '@modules/attendances/dtos/ICreateAttendanceDTO';
 import IUpdateAttendanceDTO from '@modules/attendances/dtos/IUpdateAttendanceDTO';
+import ICreateAttendanceDTO from '@modules/attendances/dtos/ICreateAttendanceDTO';
 import Attendance from '../entities/Attendance';
 
 class AttendancesRepository implements IAttendancesRepository {
@@ -98,13 +98,13 @@ class AttendancesRepository implements IAttendancesRepository {
 
   public async update({
     attendance_id,
-    user_id,
+    employee_id,
     date,
   }: IUpdateAttendanceDTO): Promise<Attendance> {
     const findAttendance = await this.ormRepository.findOne(attendance_id);
 
     const updatedAttendance = Object.assign(findAttendance, {
-      user_id,
+      employee_id,
       date,
     });
 

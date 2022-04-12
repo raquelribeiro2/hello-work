@@ -1,34 +1,29 @@
-import IGroupsRepository from '@modules/permissions/repositories/IGroupsRepository';
+import { v4 as uuidV4 } from 'uuid';
+
+import ICreateGroupDTO from '@modules/permissions/dtos/ICreateGroupDTO';
+import IGroupsRepository from '../IGroupsRepository';
 
 import Group from '../../infra/typeorm/entities/Group';
 
 class FakeGroupsRepository implements IGroupsRepository {
   private groups: Group[] = [];
 
-  public async createPermissionGroup(
-    group_id: string,
-    permission_id: string,
-  ): Promise<Group | undefined> {
-    const permissionGroup = new Group();
+  public async create({ name, type }: ICreateGroupDTO): Promise<Group> {
+    const group = new Group();
 
-    Object.assign(permissionGroup, {
-      id: group_id,
-      permissions: [{ id: permission_id }],
+    Object.assign(group, {
+      id: uuidV4(),
+      name,
+      type,
     });
 
-    this.groups.push(permissionGroup);
+    this.groups.push(group);
 
-    return permissionGroup;
+    return group;
   }
 
-  public async findByName(name: string): Promise<Group | undefined> {
-    const findGroup = this.groups.find(group => group.name === name);
-
-    return findGroup;
-  }
-
-  public async findById(id: string): Promise<Group | undefined> {
-    const findGroup = this.groups.find(group => group.id === id);
+  public async findByGroupType(type: string): Promise<Group | undefined> {
+    const findGroup = this.groups.find(group => group.type === type);
 
     return findGroup;
   }

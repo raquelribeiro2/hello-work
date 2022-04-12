@@ -17,7 +17,7 @@ class UpdateAttendanceService {
   ) {}
 
   public async execute({
-    user_id,
+    employee_id,
     attendance_id,
     date,
   }: IUpdateAttendanceDTO): Promise<Attendance | undefined> {
@@ -27,7 +27,7 @@ class UpdateAttendanceService {
       throw new AppError('Attendance not found', 404);
     }
 
-    const user = await this.usersRepository.findById(user_id);
+    const user = await this.usersRepository.findById(employee_id);
 
     if (!user) {
       throw new AppError('User not found', 404);
@@ -35,7 +35,7 @@ class UpdateAttendanceService {
 
     const attendanceUpdated = await this.attendancesRepository.update({
       attendance_id: attendance.id,
-      user_id: user.id,
+      employee_id: user.id,
       date,
     });
 

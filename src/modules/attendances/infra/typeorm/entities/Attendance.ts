@@ -15,10 +15,10 @@ class Attendance {
   id: string;
 
   @Column()
-  date: Date;
+  user_id: string;
 
   @Column()
-  user_id: string;
+  date: Date;
 
   @ManyToOne(() => User, user => user.attendances)
   @JoinColumn({ name: 'user_id' })

@@ -3,8 +3,8 @@ import { v4 as uuidV4 } from 'uuid';
 
 import IAttendancesRepository from '@modules/attendances/repositories/IAttendancesRepository';
 
-import ICreateAttendanceDTO from '@modules/attendances/dtos/ICreateAttendanceDTO';
 import IUpdateAttendanceDTO from '@modules/attendances/dtos/IUpdateAttendanceDTO';
+import ICreateAttendanceDTO from '@modules/attendances/dtos/ICreateAttendanceDTO';
 import Attendance from '../../infra/typeorm/entities/Attendance';
 
 class FakeAttendancesRepository implements IAttendancesRepository {
@@ -79,7 +79,7 @@ class FakeAttendancesRepository implements IAttendancesRepository {
 
   public async update({
     attendance_id,
-    user_id,
+    employee_id,
     date,
   }: IUpdateAttendanceDTO): Promise<Attendance> {
     const findAttendance = this.attendances.find(
@@ -87,7 +87,7 @@ class FakeAttendancesRepository implements IAttendancesRepository {
     );
 
     const updatedAttendance = Object.assign(findAttendance, {
-      user_id,
+      employee_id,
       date,
     });
 

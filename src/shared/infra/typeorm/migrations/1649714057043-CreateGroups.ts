@@ -1,12 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export default class CreateUsersGroups1649589896959
-  implements MigrationInterface
-{
+export default class CreateGroups1649714057043 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'users_groups',
+        name: 'groups',
         columns: [
           {
             name: 'id',
@@ -16,12 +14,12 @@ export default class CreateUsersGroups1649589896959
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'user_id',
-            type: 'uuid',
+            name: 'name',
+            type: 'char(50)',
           },
           {
-            name: 'group_id',
-            type: 'uuid',
+            name: 'type',
+            type: 'char(50)',
           },
           {
             name: 'created_at',
@@ -34,29 +32,11 @@ export default class CreateUsersGroups1649589896959
             default: 'now()',
           },
         ],
-        foreignKeys: [
-          {
-            name: 'UserId',
-            referencedTableName: 'users',
-            referencedColumnNames: ['id'],
-            columnNames: ['user_id'],
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
-          },
-          {
-            name: 'GroupId',
-            referencedTableName: 'groups',
-            referencedColumnNames: ['id'],
-            columnNames: ['group_id'],
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
-          },
-        ],
       }),
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('users_groups');
+    await queryRunner.dropTable('groups');
   }
 }

@@ -4,27 +4,21 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
-
-import UserGroup from './UserGroup';
 import Permission from './Permission';
 
-@Entity('groups')
-class Group {
+@Entity('modules')
+class Module {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   name: string;
 
-  @Column()
-  type: string;
-
-  @OneToMany(() => UserGroup, userGroups => userGroups.group)
-  userGroups: UserGroup[];
-
-  @OneToMany(() => Permission, permissions => permissions.group)
+  @ManyToMany(() => Permission, permissions => permissions.module)
+  @JoinTable()
   permissions: Permission[];
 
   @CreateDateColumn()
@@ -34,4 +28,4 @@ class Group {
   updated_at: Date;
 }
 
-export default Group;
+export default Module;

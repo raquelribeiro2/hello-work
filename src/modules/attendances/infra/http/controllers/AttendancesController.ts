@@ -5,10 +5,19 @@ import CreateAttendanceService from '@modules/attendances/services/CreateAttenda
 import ListAttendancesService from '@modules/attendances/services/ListAttendancesService';
 import UpdateAttendanceService from '@modules/attendances/services/UpdateAttendanceService';
 import DeleteAttendanceService from '@modules/attendances/services/DeleteAttendanceService';
+import CheckPermissionService from '@modules/permissions/services/CheckPermissionService';
 
 export default class AttendancesController {
   public async create(request: Request, response: Response): Promise<Response> {
     const user_id = request.user.id;
+
+    const checkPermission = container.resolve(CheckPermissionService);
+
+    await checkPermission.execute({
+      user_id,
+      module: 'attendances',
+      permission: 'canCreate',
+    });
 
     const createUserAttendance = container.resolve(CreateAttendanceService);
 
@@ -21,7 +30,17 @@ export default class AttendancesController {
   }
 
   public async index(request: Request, response: Response): Promise<Response> {
+    const user_id = request.user.id;
+
     const { fromDay, toDay, offset, limit } = request.query;
+
+    const checkPermission = container.resolve(CheckPermissionService);
+
+    await checkPermission.execute({
+      user_id,
+      module: 'attendances',
+      permission: 'canView',
+    });
 
     const listAttendances = container.resolve(ListAttendancesService);
 
@@ -38,15 +57,25 @@ export default class AttendancesController {
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
+    const user_id = request.user.id;
+
     const { attendance_id } = request.params;
 
-    const { user_id, date } = request.body;
+    const { user_id: employee_id, date } = request.body;
+
+    const checkPermission = container.resolve(CheckPermissionService);
+
+    await checkPermission.execute({
+      user_id,
+      module: 'attendances',
+      permission: 'canEdit',
+    });
 
     const updateAttendance = container.resolve(UpdateAttendanceService);
 
     const attendance = await updateAttendance.execute({
-      user_id,
       attendance_id,
+      employee_id,
       date,
     });
 
@@ -54,7 +83,17 @@ export default class AttendancesController {
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
+    const user_id = request.user.id;
+
     const { attendance_id } = request.params;
+
+    const checkPermission = container.resolve(CheckPermissionService);
+
+    await checkPermission.execute({
+      user_id,
+      module: 'attendances',
+      permission: 'canEdit',
+    });
 
     const deleteAttendance = container.resolve(DeleteAttendanceService);
 

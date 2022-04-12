@@ -1,7 +1,7 @@
 import { getRepository, Repository } from 'typeorm';
 
 import IGroupsRepository from '@modules/permissions/repositories/IGroupsRepository';
-
+import ICreateGroupDTO from '@modules/permissions/dtos/ICreateGroupDTO';
 import Group from '../entities/Group';
 
 class GroupsRepository implements IGroupsRepository {
@@ -11,32 +11,19 @@ class GroupsRepository implements IGroupsRepository {
     this.ormRepository = getRepository(Group);
   }
 
-  public async createPermissionGroup(
-    group_id: string,
-    permission_id: string,
-  ): Promise<Group | undefined> {
-    const permissionGroup = this.ormRepository.create({
-      id: group_id,
-      permissions: [
-        {
-          id: permission_id,
-        },
-      ],
+  public async create({ name, type }: ICreateGroupDTO): Promise<Group> {
+    const group = this.ormRepository.create({
+      name,
+      type,
     });
 
-    await this.ormRepository.save(permissionGroup);
-
-    return permissionGroup;
-  }
-
-  public async findByName(name: string): Promise<Group | undefined> {
-    const group = await this.ormRepository.findOne({ name });
+    await this.ormRepository.save(group);
 
     return group;
   }
 
-  public async findById(id: string): Promise<Group | undefined> {
-    const group = await this.ormRepository.findOne(id);
+  public async findByGroupType(type: string): Promise<Group | undefined> {
+    const group = await this.ormRepository.findOne({ type });
 
     return group;
   }

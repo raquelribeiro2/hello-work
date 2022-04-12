@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner, TableColumn } from 'typeorm';
 
-export default class AddDateFieldToAttendances1649622306691
+export default class AddDateFieldToAttendances1649751443816
   implements MigrationInterface
 {
   public async up(queryRunner: QueryRunner): Promise<void> {

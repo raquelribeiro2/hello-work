@@ -37,7 +37,7 @@ attendancesRouter.put(
     },
 
     [Segments.BODY]: {
-      user_id: Joi.string().uuid().empty(null),
+      employee_id: Joi.string().uuid().empty(null),
       date: Joi.date().empty(null),
     },
   }),

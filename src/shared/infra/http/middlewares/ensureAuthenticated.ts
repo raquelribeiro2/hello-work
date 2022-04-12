@@ -9,6 +9,7 @@ interface ITokenPayload {
   iat: number;
   exp: number;
   sub: string;
+  collaborator_id: string;
 }
 
 export default function ensureAuthenticated(

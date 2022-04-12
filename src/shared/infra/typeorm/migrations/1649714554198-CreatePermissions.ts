@@ -1,12 +1,12 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export default class CreatePermissionsGroups1649622237762
+export default class CreatePermissions1649714554198
   implements MigrationInterface
 {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'permissions_groups',
+        name: 'permissions',
         columns: [
           {
             name: 'id',
@@ -16,11 +16,27 @@ export default class CreatePermissionsGroups1649622237762
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'group_id',
+            name: 'canCreate',
+            type: 'boolean',
+          },
+          {
+            name: 'canEdit',
+            type: 'boolean',
+          },
+          {
+            name: 'canView',
+            type: 'boolean',
+          },
+          {
+            name: 'canDelete',
+            type: 'boolean',
+          },
+          {
+            name: 'module_id',
             type: 'uuid',
           },
           {
-            name: 'permission_id',
+            name: 'group_id',
             type: 'uuid',
           },
           {
@@ -36,18 +52,18 @@ export default class CreatePermissionsGroups1649622237762
         ],
         foreignKeys: [
           {
-            name: 'GroupId',
-            referencedTableName: 'groups',
+            name: 'ModuleId',
+            referencedTableName: 'modules',
             referencedColumnNames: ['id'],
-            columnNames: ['group_id'],
+            columnNames: ['module_id'],
             onDelete: 'CASCADE',
             onUpdate: 'CASCADE',
           },
           {
-            name: 'PermissionId',
-            referencedTableName: 'permissions',
+            name: 'GroupId',
+            referencedTableName: 'groups',
             referencedColumnNames: ['id'],
-            columnNames: ['permission_id'],
+            columnNames: ['group_id'],
             onDelete: 'CASCADE',
             onUpdate: 'CASCADE',
           },
@@ -57,6 +73,6 @@ export default class CreatePermissionsGroups1649622237762
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('permissions_groups');
+    await queryRunner.dropTable('permissions');
   }
 }
