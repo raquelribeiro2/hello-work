@@ -1,20 +1,25 @@
+/* eslint-disable no-self-compare */
 import { v4 as uuidV4 } from 'uuid';
 
 import IAttendancesRepository from '@modules/attendances/repositories/IAttendancesRepository';
 
-import Attendance from '../../infra/typeorm/entities/Attendance';
 import IUpdateAttendanceDTO from '@modules/attendances/dtos/IUpdateAttendanceDTO';
+import ICreateAttendanceDTO from '@modules/attendances/dtos/ICreateAttendanceDTO';
+import Attendance from '../../infra/typeorm/entities/Attendance';
 
 class FakeAttendancesRepository implements IAttendancesRepository {
   private attendances: Attendance[] = [];
 
-  public async create(user_id: string): Promise<Attendance> {
+  public async create({
+    user_id,
+    date,
+  }: ICreateAttendanceDTO): Promise<Attendance> {
     const attendance = new Attendance();
 
     Object.assign(attendance, {
       id: uuidV4(),
       user_id,
-      created_at: new Date(Date.now()),
+      date,
     });
 
     this.attendances.push(attendance);

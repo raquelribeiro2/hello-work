@@ -2,8 +2,8 @@ import { Router } from 'express';
 
 import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
 
-import AttendancesController from '../controllers/AttendancesController';
 import { celebrate, Joi, Segments } from 'celebrate';
+import AttendancesController from '../controllers/AttendancesController';
 
 const attendancesRouter = Router();
 

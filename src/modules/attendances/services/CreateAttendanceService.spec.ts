@@ -22,7 +22,10 @@ describe('CreateEmployeeAttendance', () => {
       password: '123456',
     });
 
-    const attendance = await createAttendance.execute(user.id);
+    const attendance = await createAttendance.execute({
+      user_id: user.id,
+      date: new Date(Date.now()),
+    });
 
     expect(attendance).toHaveProperty('id');
   });
